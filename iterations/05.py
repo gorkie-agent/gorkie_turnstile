@@ -1,10 +1,14 @@
-"""05_parallel_ultra.py — Optimized batch with shortened timeouts.
+"""05.py — Optimized batch with shortened timeouts.
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
+This iteration cut solve time from ~87s to ~8s by switching from
+networkidle to domcontentloaded, reducing timeouts to 15s, and
+using tight 0.5s polling instead of 2s sleeps.
+
 Usage:
-    python 05_parallel_ultra.py --runs 100
+    python iterations/05.py --runs 100
 """
 import argparse, json, random, time
 from pathlib import Path

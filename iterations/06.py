@@ -1,13 +1,18 @@
-"""06_worker.py — Standalone worker script for shell-level parallelization.
+"""06.py — Standalone worker script for shell-level parallelization.
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
+This iteration made it easy to shard work across multiple shell
+processes. Each worker owns a slice of the run range and appends
+to the same JSONL log.
+
 Usage:
-    python 06_worker.py <worker_id> <offset> <count>
-    # Then run multiple in background:
-    python 06_worker.py 1 0 500 &
-    python 06_worker.py 2 500 500 &
+    python iterations/06.py <worker_id> <offset> <count>
+
+Examples:
+    python iterations/06.py 1 0 500 &
+    python iterations/06.py 2 500 500 &
 """
 import json, random, sys, time
 from pathlib import Path

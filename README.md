@@ -13,51 +13,48 @@ Built because Anirudh asked gorkie to test whether a free stealth browser could 
 
 Datacenter IPs get blocked even with perfect stealth. The proxy makes the difference.
 
-## Files
+## Structure
 
-| File | What it does |
+| Path | What it does |
 |------|-------------|
-| `01_test_single.py` | One-off test with and without proxy |
-| `02_test_click.py` | Single solve with click + humanize |
-| `03_test_batch.py` | Batch runner that logs results to JSONL |
-| `04_test_parallel.py` | Parallel workers (one browser per worker) |
-| `05_parallel_ultra.py` | Faster batch with shorter timeouts |
-| `06_worker.py` | Standalone worker for background shell jobs |
-| `07_single_browser_parallel.py` | Single browser, multiple concurrent contexts (async) |
+| `main.py` | **The current solver.** Async, concurrent contexts, auto proxy relay, configurable speed. |
+| `.env` | Your proxy credentials and target URL. Copy from `.env.example`. |
+| `iterations/01.py` | One-off test with and without proxy. Proved passive loading fails. |
+| `iterations/02.py` | Single solve with click + humanize + geoip. The breakthrough. |
+| `iterations/03.py` | Batch runner that logs results to JSONL. |
+| `iterations/04.py` | Parallel workers using multiprocessing. One browser per worker. |
+| `iterations/05.py` | Faster batch with shorter timeouts. Cut time from ~87s to ~8s. |
+| `iterations/06.py` | Standalone worker for shell-level parallelization. |
+| `cloakbrowser-docs/` | Cloned CloakBrowser repo for reference. |
 
 ## Quick start
 
 ```bash
-pip install cloakbrowser
+pip install cloakbrowser python-dotenv
 pip install 'cloakbrowser[geoip]'
 playwright install chromium
 ```
 
-Set up your proxy relay locally (replace USER/PASS/HOST/PORT with your actual proxy):
+Copy and edit the environment file:
 
 ```bash
-gost -L socks5://:1080 -F socks5://USER:PASS@HOST:PORT &
+cp .env.example .env
+# edit .env with your proxy credentials
 ```
 
-Run a single test:
+Run a batch:
 
 ```bash
-python 02_test_click.py
+python main.py --runs 100 --concurrency 5
 ```
 
-Run a batch of 100:
+## Speed
 
-```bash
-python 05_parallel_ultra.py --runs 100
-```
+With concurrency set to 5, solves happen at roughly **1 per second** (each solve is ~5s but they overlap). The sweet spot is 4-6 concurrent contexts. Higher concurrency may trigger Cloudflare throttling.
 
 ## Results from testing
 
-With the right proxy + click combo, solves happen in about 5 to 8 seconds each. Without the proxy, it fails every time.
-
-## A note on speed
-
-The fastest approach is `07_single_browser_parallel.py`. It runs multiple contexts inside one browser process instead of launching a new browser for every solve. Way less overhead.
+With the right proxy + click combo, individual solves happen in about 5 to 8 seconds. Without the proxy, it fails every time.
 
 ## Troubleshooting
 

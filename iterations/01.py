@@ -1,11 +1,15 @@
-"""01_test_single.py — Basic CloakBrowser vs Turnstile (passive observation).
+"""01.py — Basic CloakBrowser vs Turnstile (passive observation).
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
+This was the first iteration. It proved that passive loading alone
+cannot solve Turnstile, even with a proxy. The widget renders but
+never auto-solves without a click.
+
 Usage:
-    python 01_test_single.py
-    python 01_test_single.py --proxy socks5://127.0.0.1:1080
+    python iterations/01.py
+    python iterations/01.py --proxy socks5://127.0.0.1:1080
 """
 import sys
 import time
@@ -25,7 +29,6 @@ print(f"{'='*60}")
 browser = launch(headless=True, proxy=PROXY, geoip=False)
 page = browser.new_page()
 
-# Show IP
 try:
     page.goto("https://httpbin.org/ip", timeout=10000)
     ip = page.evaluate("JSON.parse(document.body.innerText).origin")
@@ -33,7 +36,6 @@ try:
 except Exception as e:
     print(f"IP: could not detect ({e})")
 
-# Navigate to target
 print(f"Navigating to {TARGET_URL} ...")
 try:
     page.goto(TARGET_URL, wait_until="networkidle", timeout=60000)
@@ -42,7 +44,6 @@ except Exception as e:
 
 time.sleep(10)
 
-# Evaluate
 result = page.evaluate("""() => {
     const text = document.body.innerText || '';
     const title = document.title || '';

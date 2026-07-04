@@ -1,11 +1,15 @@
-"""02_test_click.py — Single run WITH click + humanize + geoip.
+"""02.py — Single run WITH click + humanize + geoip.
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
+This iteration proved that clicking the widget is mandatory.
+With humanize=True and geoip=True, plus a residential proxy,
+it solved in ~7 seconds. Without the proxy it fails every time.
+
 Usage:
-    python 02_test_click.py
-    python 02_test_click.py --proxy socks5://127.0.0.1:1080
+    python iterations/02.py
+    python iterations/02.py --proxy socks5://127.0.0.1:1080
 """
 import sys
 import time
@@ -30,7 +34,6 @@ browser = launch(
 )
 page = browser.new_page()
 
-# IP check
 for ip_url in ("https://httpbin.org/ip", "https://api.ipify.org?format=json"):
     try:
         page.goto(ip_url, timeout=10000, wait_until="load")
@@ -40,7 +43,6 @@ for ip_url in ("https://httpbin.org/ip", "https://api.ipify.org?format=json"):
     except Exception as e:
         print(f"IP check failed on {ip_url}: {e}")
 
-# Navigate
 print(f"Navigating to {TARGET_URL} ...")
 try:
     page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=20000)
@@ -49,7 +51,6 @@ except Exception as e:
 
 time.sleep(4)
 
-# Click widget container
 print("Clicking Turnstile widget...")
 try:
     page.click(".cf-turnstile, .turnstile, #cf-turnstile, [class*='turnstile']", timeout=5000)
@@ -57,7 +58,6 @@ try:
 except Exception as e:
     print(f"Click warning: {e}")
 
-# Poll for success
 passed = False
 for _ in range(10):
     text = page.evaluate("() => document.body.innerText || ''").lower()

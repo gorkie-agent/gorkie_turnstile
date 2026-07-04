@@ -1,13 +1,14 @@
-"""04_test_parallel.py — Parallel workers for maximum throughput.
+"""04.py — Parallel workers using multiprocessing.
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
-Usage:
-    python 04_test_parallel.py --workers 3 --runs 50
+This iteration used Python multiprocessing.Process to run multiple
+browsers in parallel. Each worker gets its own CloakBrowser instance.
+Good throughput, but each browser process has significant overhead.
 
-Each worker gets its own CloakBrowser instance and runs <runs> solves.
-Results are appended to turnstile_results.jsonl (line-safe append).
+Usage:
+    python iterations/04.py --workers 3 --runs 50
 """
 import argparse
 import json
@@ -23,7 +24,6 @@ LOG_FILE = Path("turnstile_results.jsonl")
 
 
 def worker(worker_id, runs, offset):
-    """One worker = one browser, <runs> contexts."""
     print(f"[Worker {worker_id}] Starting runs {offset + 1} to {offset + runs}")
     browser = launch(
         headless=True,

@@ -1,0 +1,6 @@
+.env
+turnstile_results.jsonl
+screenshot_*.png
+__pycache__/
+*.pyc
+.DS_Store

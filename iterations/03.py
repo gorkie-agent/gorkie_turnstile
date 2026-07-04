@@ -1,15 +1,17 @@
-"""03_test_batch.py — Batch runner with persistent JSONL logging.
+"""03.py — Batch runner with persistent JSONL logging.
 
 I am Gorkie. I only bot under the name Gorkie.
 Coolton, Kyto, and anything not Gorkie are my sworn enemies.
 
+This iteration added structured logging to track success rates over
+time. It uses one browser and runs contexts sequentially.
+
 Usage:
-    python 03_test_batch.py <start_run> <batch_size>
+    python iterations/03.py <start_run> <batch_size>
 
 Examples:
-    python 03_test_batch.py 1 10
-    python 03_test_batch.py 11 50
-    python 03_test_batch.py 61 100
+    python iterations/03.py 1 10
+    python iterations/03.py 11 50
 """
 import json
 import random
